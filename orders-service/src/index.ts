@@ -26,8 +26,8 @@ app.use(express.json({ limit: '10mb' })); // Parser JSON
 app.use(express.urlencoded({ extended: true })); // Parser URL-encoded
 
 // Rutas principales
-app.use('/orders', ordersRoutes);
-app.use('/orders', orderStatusRoutes);
+app.use('/', ordersRoutes);
+app.use('/', orderStatusRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -63,13 +63,21 @@ app.use('*', (req, res) => {
 });
 
 // Middleware de manejo de errores globales
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error('Error no manejado:', err);
-  res.status(500).json({
-    message: 'Error interno del servidor',
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Error interno',
-  });
-});
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.error('Error no manejado:', err);
+    res.status(500).json({
+      message: 'Error interno del servidor',
+      error:
+        process.env.NODE_ENV === 'development' ? err.message : 'Error interno',
+    });
+  }
+);
 
 // Función para iniciar el servidor
 async function startServer() {
