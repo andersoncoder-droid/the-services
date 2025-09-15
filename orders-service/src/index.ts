@@ -3,7 +3,6 @@ import ordersRoutes from './routes/orders.routes.js';
 import orderStatusRoutes from './routes/orderStatus.routes.js';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import cors from 'cors';
 import { testConnection } from './db.js';
 
 // Cargar variables de entorno
@@ -12,16 +11,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3004;
 
-// Configuración de CORS
-const corsOptions = {
-  origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:3000'],
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
-
 // Middleware
 app.use(morgan('dev')); // Logging de requests
-app.use(cors(corsOptions)); // CORS
 app.use(express.json({ limit: '10mb' })); // Parser JSON
 app.use(express.urlencoded({ extended: true })); // Parser URL-encoded
 
